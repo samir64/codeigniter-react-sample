@@ -20,6 +20,9 @@ class MY_Controller extends CI_Controller
 		if ((uri_string() !== "") && (uri_string() !== "login/check") && !$user) {
 			redirect("/");
 		}
+		if (((uri_string() === "") || (uri_string() === "login/check")) && !!$user) {
+			redirect("/dashboard");
+		}
 
 		$this->rules['login'] = array(
 			array(
@@ -30,6 +33,14 @@ class MY_Controller extends CI_Controller
 			array(
 				'field' => 'password',
 				'label' => 'Password',
+				'rules' => 'required'
+			)
+		);
+
+		$this->rules['project'] = array(
+			array(
+				'field' => 'title',
+				'label' => 'Title',
 				'rules' => 'required'
 			)
 		);

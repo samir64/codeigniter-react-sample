@@ -12,8 +12,6 @@ class Login extends MY_Controller
 	{
 		load_js(['app'], 'js_assets');
 
-		$this->load->model('userModel');
-
 		$data = $this->session->flashdata("form_data");
 
 		$this->load->view('header');

@@ -12,11 +12,19 @@ class Dashboard extends MY_Controller
 	{
 		load_js(['app'], 'js_assets');
 
-		$this->load->model('userModel');
+		$this->load->model('projectModel');
+
+		$rows = json_decode(json_encode($this->projectModel->getAll()), true);
+		for ($i = 0; $i < count($rows); $i++) {
+			$fields = array($rows[$i]['id'], $rows[$i]['title'], date("Y/m/d", $rows[$i]['date']));
+			$rows[$i] = join(",", $fields);
+		}
+		$rows = join("|", $rows);
 
 		$user = $this->session->userdata("user");
 		$data = array(
-			"page" => "project_list"
+			"page" => "project_list",
+			"rows" => $rows
 		);
 
 		$this->load->view('header');

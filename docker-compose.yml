@@ -25,8 +25,10 @@ services:
 
   php:
     image: php:7.4.20-fpm-alpine3.13
-    command: ash -c "apk update && apk add npm php7-mysqli && docker-php-ext-install mysqli && npm install && npm run build && php -S localhost:8087"
+    command: ash -c "apk update && apk add npm php7-mysqli zlib-dev libzip-dev libxml2-dev php7-zip && docker-php-ext-configure zip --with-zlib-dir=/usr && docker-php-ext-install mysqli zip xml && npm install && npm run build && php -S localhost:8087"
     working_dir: /app
+    environment:
+      INSTALL_ZIP_ARCHIVE: 'true'
     # ports:
     #   - 8087:8087
     volumes:

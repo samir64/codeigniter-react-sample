@@ -27,7 +27,7 @@ class ProjectModel extends MY_Model
           'type' => 'INT',
           'constraint' => 9
         ),
-        'data' => array(
+        'file' => array(
           'type' => 'VARCHAR',
           'constraint' => 60
         )
@@ -36,9 +36,11 @@ class ProjectModel extends MY_Model
   }
 
   /**
-   * @param {String} $username
+   * @param {String} $title
+   * @param {String} $description
+   * @param {String} $file
    */
-  public function setProject($title, $description, $data)
+  public function setProject($title, $description, $file)
   {
     $project = $this->getProjectByTitle($title);
 
@@ -47,7 +49,7 @@ class ProjectModel extends MY_Model
       $data['title'] = $title;
       $data['description'] = $description;
       $data['date'] = time();
-      $data['data'] = $data;
+      $data['file'] = $file;
 
       return $this->insert($data);
     } else {

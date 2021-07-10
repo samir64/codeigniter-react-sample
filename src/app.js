@@ -6,6 +6,7 @@ import Main from './components/Main';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import NewProject from './components/NewProject';
+import EditProject from './components/EditProject';
 import HeaderNavbar from './components/HeaderNavbar';
 
 import './styles/main.css';
@@ -17,6 +18,7 @@ const components = {
   Login,
   Dashboard,
   NewProject,
+  EditProject,
   HeaderNavbar
 };
 

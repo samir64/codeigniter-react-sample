@@ -20,12 +20,12 @@ export default class Main extends React.Component {
     return (
       <Container>
         <Form
-          className="login-form"
+          className="form login-form"
           action={`${BASE_URL}/login/check`}
           method="POST"
         >
           <Form.Group
-            controlId="formBasicUsername"
+            controlId="username"
             className={usernameHasError ? 'outline-danger' : ''}
           >
             <Form.Label>Username</Form.Label>
@@ -38,7 +38,7 @@ export default class Main extends React.Component {
           </Form.Group>
 
           <Form.Group
-            controlId="formBasicPassword"
+            controlId="password"
             className={passwordHasError ? 'outline-danger' : ''}
           >
             <Form.Label>Password</Form.Label>

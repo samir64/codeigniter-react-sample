@@ -46,6 +46,10 @@ class UserModel extends MY_Model
 
   /**
    * @param {String} $username
+   * @param {String} $password
+   * @param {String} $email
+   * @param {String} $firstname
+   * @param {String} $lastname
    */
   public function setUser($username, $password, $email, $firstname, $lastname)
   {

@@ -3,8 +3,11 @@
   height: 25px;
 }
 
-.login-form {
+.form {
   max-width: 500px;
+}
+
+.login-form {
   margin: 150px auto;
 }
 

@@ -31,7 +31,7 @@ export default class Dashboard extends React.Component {
 
       return (
         <>
-          <ListGroup.Item className="col-1">{index}</ListGroup.Item>
+          <ListGroup.Item className="col-1">{index + 1}</ListGroup.Item>
           {result}
           <ListGroup.Item className="col">
             <Form
