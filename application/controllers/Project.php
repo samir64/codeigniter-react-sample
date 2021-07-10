@@ -151,8 +151,8 @@ class Project extends MY_Controller
 		$reader = ReaderEntityFactory::createReaderFromFile($filePath);
 
 		$reader->open($filePath);
-		$table = array();
-		$columns = array();
+		$table = array("index" => array());
+		$columns = array("index");
 
 		foreach ($reader->getSheetIterator() as $sheet) {
 			foreach ($sheet->getRowIterator() as $num => $row) {
@@ -162,6 +162,7 @@ class Project extends MY_Controller
 						$table[$cell->getValue()] = array();
 						array_push($columns, $cell->getValue());
 					} else {
+						array_push($table['index'], $num - 2);
 						array_push($table[$columns[$col]], $cell->getValue());
 					}
 				}
@@ -170,16 +171,18 @@ class Project extends MY_Controller
 
 		$reader->close();
 
-		var_dump($table);
+		// var_dump($table);
 
 		$user = $this->session->userdata("user");
 		$data = array(
 			"page" => "project_view",
-			"projectId" => $id
+			"project" => $project,
+			"table" => $table
 		);
 
 		$this->load->view('header');
 		$this->load->view('page_header', array_merge(array("user" => $user), $data));
+		$this->load->view('view_project', $data);
 		$this->load->view('page_footer');
 		$this->load->view('footer');
 	}

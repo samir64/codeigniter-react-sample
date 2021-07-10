@@ -2,7 +2,7 @@ import React from 'react';
 import { BASE_URL } from '../util/constants';
 import { Button, Container, Form, Row } from 'react-bootstrap';
 
-export default class Main extends React.Component {
+export default class NewProject extends React.Component {
   render() {
     return (
       <Container>
