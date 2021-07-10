@@ -1,94 +1,78 @@
 import React from 'react';
 import { BASE_URL } from '../util/constants';
-import { Button, Container, Table } from 'react-bootstrap';
+import { Button, Jumbotron, Table } from 'react-bootstrap';
 import { Chart } from 'react-google-charts';
 
 export default class ViewProject extends React.Component {
   render() {
-    let columns = {
-      Task: 'Process',
-      Duration: 'Sum Time',
-      Workstation: 'Workstation',
-      Line: 'index',
-      Process: 'Process Number',
-      Time: 'Sum Time',
-      Value: 'Value Added'
-    };
+    let columns = [
+      'Process',
+      'Workstation',
+      'Line',
+      'Process number',
+      'Sum Time',
+      'Time, value adding',
+      'Time, non value adding'
+    ];
+    let left = 0;
+    let rows = globalData.table
+      .filter((row) => row.Process.toLowerCase() !== 'all')
+      .slice(0, 20)
+      .map((row) => {
+        let result = [...columns.map((column) => row[column]), left];
+
+        left += Math.round(row['Sum Time']);
+        return result;
+      });
+    let totalTime = rows.reduce(
+      (result, current) => result + Math.round(current[4]),
+      0
+    );
+
     return (
-      <Container>
-        <Table>
+      <Jumbotron>
+        <Table className="chart-table">
           <thead>
-            <tr>
-              {Object.entries(columns).map(([title, field], index) => (
-                <th key={index}>{title}</th>
+            <tr className="chart-table-row">
+              {columns.map((column, index) => (
+                <th className="chart-table-cell" key={index}>
+                  {column}
+                </th>
               ))}
+              <th className="chart"></th>
             </tr>
           </thead>
+          <tbody>
+            {rows.map((row, rowNo) => (
+              <tr key={rowNo} className="chart-table-row">
+                {row.slice(0, 7).map((cell, cellNo) => (
+                  <td
+                    key={cellNo}
+                    className="chart-table-cell"
+                    style={{ fontWeight: 400 }}
+                  >
+                    {cell}
+                  </td>
+                ))}
+                <th className="chart-table-cell">
+                  <div
+                    className="table-chart-progress-container"
+                    style={{
+                      left: `${(100 * row[7]) / totalTime}%`,
+                      width: `${(100 * Math.round(row[4])) / totalTime}%`
+                    }}
+                  >
+                    <div
+                      className="table-chart-progress-content"
+                      style={{ width: '100%' }}
+                    ></div>
+                  </div>
+                </th>
+              </tr>
+            ))}
+          </tbody>
         </Table>
-        <Chart
-          width={'100%'}
-          height={'400px'}
-          chartType="Gantt"
-          loader={<div>Loading Chart</div>}
-          data={[
-            [
-              { type: 'string', label: 'Task ID' },
-              { type: 'string', label: 'Task Name' },
-              { type: 'date', label: 'Start Date' },
-              { type: 'date', label: 'End Date' },
-              { type: 'number', label: 'Duration' },
-              { type: 'number', label: 'Percent Complete' },
-              { type: 'string', label: 'Dependencies' }
-            ],
-            [
-              'Research',
-              'Find sources',
-              new Date(2015, 0, 1),
-              new Date(2015, 0, 5),
-              null,
-              100,
-              null
-            ],
-            [
-              'Write',
-              'Write paper',
-              null,
-              new Date(2015, 0, 9),
-              3 * 24 * 60 * 60 * 1000,
-              25,
-              'Research,Outline'
-            ],
-            [
-              'Cite',
-              'Create bibliography',
-              null,
-              new Date(2015, 0, 7),
-              1 * 24 * 60 * 60 * 1000,
-              20,
-              'Research'
-            ],
-            [
-              'Complete',
-              'Hand in paper',
-              null,
-              new Date(2015, 0, 10),
-              1 * 24 * 60 * 60 * 1000,
-              0,
-              'Cite,Write'
-            ],
-            [
-              'Outline',
-              'Outline paper',
-              null,
-              new Date(2015, 0, 6),
-              1 * 24 * 60 * 60 * 1000,
-              100,
-              'Research'
-            ]
-          ]}
-          rootProps={{ 'data-testid': '1' }}
-        />
-      </Container>
+      </Jumbotron>
     );
   }
 }

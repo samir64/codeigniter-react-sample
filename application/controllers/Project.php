@@ -151,19 +151,23 @@ class Project extends MY_Controller
 		$reader = ReaderEntityFactory::createReaderFromFile($filePath);
 
 		$reader->open($filePath);
-		$table = array("index" => array());
+		$table = array();
 		$columns = array("index");
 
 		foreach ($reader->getSheetIterator() as $sheet) {
 			foreach ($sheet->getRowIterator() as $num => $row) {
-				$cells = $row->getCells();
-				foreach ($cells as $col => $cell) {
+				if ($num > 1) {
+					array_push($table, array('index' => $num - 2));
+				}
+				foreach ($row->getCells() as $col => $cell) {
 					if ($num === 1) {
-						$table[$cell->getValue()] = array();
+						// $table[$cell->getValue()] = array();
 						array_push($columns, $cell->getValue());
 					} else {
-						array_push($table['index'], $num - 2);
-						array_push($table[$columns[$col]], $cell->getValue());
+						$table[$num - 2][$columns[$col + 1]] = $cell->getValue();
+
+						// array_push($table['index'], $num - 2);
+						// array_push($table[$columns[$col + 1]], $cell->getValue());
 					}
 				}
 			}
