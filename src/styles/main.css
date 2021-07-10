@@ -19,3 +19,85 @@
 .outline-danger {
   border: 1px red solid;
 }
+
+.chart-table {
+  width: 100%;
+}
+
+.chart-table-row,
+.chart-table-cell {
+  line-height: 25px;
+  height: 25px;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+td.chart-table-cell {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  /* max-width: 0; */
+  overflow: hidden;
+}
+
+.chart {
+  /* width: 50%; */
+  /* min-width: 5000px; */
+}
+
+.table-chart-progress-container {
+  position: relative;
+  height: 19px;
+  top: 3px;
+  background-color: #5e97f6;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.table-chart-progress-content {
+  position: absolute;
+  height: 19px;
+  background-color: #2a56c6;
+}
+
+.label {
+  font-weight: 700;
+  color: #807a7a;
+}
+
+.form-control .form-control-item {
+  margin: 10px 10px 0 0;
+}
+
+.timeline {
+  background-color: #d9defe;
+  height: 250px;
+  position: relative;
+}
+
+.timeline-line {
+  height: 5px;
+  top: 30%;
+}
+
+.timeline-process {
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  top: 50%;
+}
+
+.timeline-process-title {
+  transform: translateY(15px);
+}
+
+.timeline-line,
+.timeline-process,
+.timeline-process-title {
+  position: absolute;
+}
+
+.timeline-line,
+.timeline-process {
+  background-color: #2a56c6;
+  transform: translateY(-50%);
+}
