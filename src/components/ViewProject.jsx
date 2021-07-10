@@ -17,7 +17,7 @@ export default class ViewProject extends React.Component {
     let left = 0;
     let rows = globalData.table
       .filter((row) => row.Process.toLowerCase() !== 'all')
-      .slice(0, 20)
+      // .slice(0, 20)
       .map((row) => {
         let result = [...columns.map((column) => row[column]), left];
 
