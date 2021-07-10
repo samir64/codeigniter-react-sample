@@ -9,6 +9,7 @@ import NewProject from './components/NewProject';
 import EditProject from './components/EditProject';
 import DeleteProject from './components/DeleteProject';
 import ViewProject from './components/ViewProject';
+import AnimateProject from './components/AnimateProject';
 import HeaderNavbar from './components/HeaderNavbar';
 
 import './styles/main.css';
@@ -23,6 +24,7 @@ const components = {
   EditProject,
   DeleteProject,
   ViewProject,
+  AnimateProject,
   HeaderNavbar
 };
 

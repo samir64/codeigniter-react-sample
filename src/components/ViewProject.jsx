@@ -1,7 +1,6 @@
 import React from 'react';
 import { BASE_URL } from '../util/constants';
 import { Button, Jumbotron, Table } from 'react-bootstrap';
-import { Chart } from 'react-google-charts';
 
 export default class ViewProject extends React.Component {
   render() {
@@ -17,7 +16,7 @@ export default class ViewProject extends React.Component {
     let left = 0;
     let rows = globalData.table
       .filter((row) => row.Process.toLowerCase() !== 'all')
-      // .slice(0, 20)
+      // .slice(0, 10)
       .map((row) => {
         let result = [...columns.map((column) => row[column]), left];
 
@@ -31,6 +30,14 @@ export default class ViewProject extends React.Component {
 
     return (
       <Jumbotron>
+        <Button
+          variant="primary"
+          onClick={() => {
+            window.location.href = `/project/animate/${this.props.project_id}`;
+          }}
+        >
+          Animate
+        </Button>
         <Table className="chart-table">
           <thead>
             <tr className="chart-table-row">
@@ -39,7 +46,10 @@ export default class ViewProject extends React.Component {
                   {column}
                 </th>
               ))}
-              <th className="chart"></th>
+              <th
+                className="chart"
+                style={{ minWidth: `${totalTime * 5}px` }}
+              ></th>
             </tr>
           </thead>
           <tbody>
@@ -54,7 +64,7 @@ export default class ViewProject extends React.Component {
                     {cell}
                   </td>
                 ))}
-                <th className="chart-table-cell">
+                <td className="chart-table-cell">
                   <div
                     className="table-chart-progress-container"
                     style={{
@@ -67,7 +77,7 @@ export default class ViewProject extends React.Component {
                       style={{ width: '100%' }}
                     ></div>
                   </div>
-                </th>
+                </td>
               </tr>
             ))}
           </tbody>

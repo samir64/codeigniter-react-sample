@@ -161,21 +161,15 @@ class Project extends MY_Controller
 				}
 				foreach ($row->getCells() as $col => $cell) {
 					if ($num === 1) {
-						// $table[$cell->getValue()] = array();
 						array_push($columns, $cell->getValue());
 					} else {
 						$table[$num - 2][$columns[$col + 1]] = $cell->getValue();
-
-						// array_push($table['index'], $num - 2);
-						// array_push($table[$columns[$col + 1]], $cell->getValue());
 					}
 				}
 			}
 		}
 
 		$reader->close();
-
-		// var_dump($table);
 
 		$user = $this->session->userdata("user");
 		$data = array(
@@ -187,6 +181,53 @@ class Project extends MY_Controller
 		$this->load->view('header');
 		$this->load->view('page_header', array_merge(array("user" => $user), $data));
 		$this->load->view('view_project', $data);
+		$this->load->view('page_footer');
+		$this->load->view('footer');
+	}
+
+	public function animate()
+	{
+		$id = $this->uri->segment(3);
+
+		load_js(['app'], 'js_assets');
+
+		$this->load->model('projectModel');
+		$project = $this->projectModel->getProjectById($id);
+
+		$filePath = APPPATH . "public/uploads/" . $project->file;
+		$reader = ReaderEntityFactory::createReaderFromFile($filePath);
+
+		$reader->open($filePath);
+		$table = array();
+		$columns = array("index");
+
+		foreach ($reader->getSheetIterator() as $sheet) {
+			foreach ($sheet->getRowIterator() as $num => $row) {
+				if ($num > 1) {
+					array_push($table, array('index' => $num - 2));
+				}
+				foreach ($row->getCells() as $col => $cell) {
+					if ($num === 1) {
+						array_push($columns, $cell->getValue());
+					} else {
+						$table[$num - 2][$columns[$col + 1]] = $cell->getValue();
+					}
+				}
+			}
+		}
+
+		$reader->close();
+
+		$user = $this->session->userdata("user");
+		$data = array(
+			"page" => "project_view",
+			"project" => $project,
+			"table" => $table
+		);
+
+		$this->load->view('header');
+		$this->load->view('page_header', array_merge(array("user" => $user), $data));
+		$this->load->view('animate_project', $data);
 		$this->load->view('page_footer');
 		$this->load->view('footer');
 	}

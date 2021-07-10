@@ -5,4 +5,4 @@
     table: <?= json_encode($table) ?>
   }
 </script>
-<div id="ViewProject" class="App" project_id="<?= $project->id ?>" project_title="<?= $project->title ?>" project_description="<?= $project->description ?>"> </div>
+<div id="AnimateProject" class="App" project_id="<?= $project->id ?>" project_title="<?= $project->title ?>" project_description="<?= $project->description ?>"> </div>
