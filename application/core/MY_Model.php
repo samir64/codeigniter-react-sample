@@ -43,4 +43,16 @@ abstract class MY_Model extends CI_Model
   {
     return $this->db->insert($this->table, $data);
   }
+
+  public function update($id, $data)
+  {
+    $this->db->where(array("id" => $id));
+    return $this->db->update($this->table, $data);
+  }
+
+  public function delete($id)
+  {
+    $this->db->where(array("id" => $id));
+    return $this->db->delete($this->table);
+  }
 }

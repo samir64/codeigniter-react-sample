@@ -54,6 +54,39 @@ class Project extends MY_Controller
 		$this->load->view('footer');
 	}
 
+	public function delete()
+	{
+		$id = $this->uri->segment(3);
+
+		load_js(['app'], 'js_assets');
+
+		$this->load->model('projectModel');
+
+		$user = $this->session->userdata("user");
+		$data = array(
+			"page" => "project_edit",
+			"project" => $this->projectModel->getProjectById($id)
+		);
+
+		$this->load->view('header');
+		$this->load->view('page_header', array_merge(array("user" => $user), $data));
+		$this->load->view('delete_project', $data);
+		$this->load->view('page_footer');
+		$this->load->view('footer');
+	}
+
+	public function delete_confirm()
+	{
+		$id = $this->uri->segment(3);
+
+		load_js(['app'], 'js_assets');
+
+		$this->load->model('projectModel');
+
+		$this->projectModel->delete($id);
+		redirect("/dashboard");
+	}
+
 	public function save()
 	{
 		$id = $this->uri->segment(3);
@@ -69,7 +102,6 @@ class Project extends MY_Controller
 		$this->load->model('projectModel');
 		$projectIsValid = TRUE;
 		$hasFile = $_FILES["file"]["size"] > 0;
-		// var_dump($this->input->file("file"));
 
 		$this->form_validation->set_rules($this->rules['project']);
 		if ($this->form_validation->run() == TRUE) {
@@ -82,9 +114,15 @@ class Project extends MY_Controller
 					$this->projectModel->setProject($this->input->post('title'), $this->input->post('description'), $fileData['file_name']);
 				} else {
 					//TODO: Update project
+					$data = array("title" => $this->input->post("title"), "description" => $this->input->post("description"));
+					if ($hasFile) {
+						$data["file"] = $fileData["file_name"];
+					}
+					$this->projectModel->update($id, $data);
 				}
 				redirect('/dashboard');
 			} else {
+				// var_dump($this->upload->display_errors());
 				$projectIsValid = FALSE;
 			}
 		} else {
