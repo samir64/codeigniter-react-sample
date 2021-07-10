@@ -2,7 +2,7 @@ import React from 'react';
 import { BASE_URL } from '../util/constants';
 import { Button, Container, Form, Row } from 'react-bootstrap';
 
-export default class Main extends React.Component {
+export default class EditProject extends React.Component {
   render() {
     return (
       <Container>
@@ -14,7 +14,11 @@ export default class Main extends React.Component {
         >
           <Form.Group controlId="projectTitle">
             <Form.Label>Project Title</Form.Label>
-            <Form.Control placeholder="Project Title" name="title" defaultValue={this.props.project_title} />
+            <Form.Control
+              placeholder="Project Title"
+              name="title"
+              defaultValue={this.props.project_title}
+            />
             <Form.Text className="text-muted"></Form.Text>
           </Form.Group>
 
@@ -29,7 +33,10 @@ export default class Main extends React.Component {
           </Form.Group>
 
           <Form.Group controlId="file">
-            <Form.Label>Replace Project Data (If you want to use current uploaded file leave it empty):</Form.Label>
+            <Form.Label>
+              Replace Project Data (If you want to use current uploaded file
+              leave it empty):
+            </Form.Label>
             <div></div>
             <Form.Control type="file" placeholder="Project Data" name="file" />
             <Form.Text className="text-muted"></Form.Text>
@@ -38,11 +45,21 @@ export default class Main extends React.Component {
           <Row>
             <Button
               variant="primary"
-              className="col-12 col-md-2"
+              className="col-12 col-md-2 me-md-2"
               block
               type="submit"
             >
               Save
+            </Button>
+            <Button
+              variant="secondary"
+              className="col-12 col-md-2 ms-md-2"
+              onClick={() => {
+                window.location.href = '/dashboard';
+              }}
+              block
+            >
+              Cancel
             </Button>
           </Row>
         </Form>

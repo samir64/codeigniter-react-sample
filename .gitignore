@@ -35,3 +35,4 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 db
 .devcontainer
 .vscode
+application/public/uploads/*

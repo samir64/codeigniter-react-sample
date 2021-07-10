@@ -54,6 +54,39 @@ class Project extends MY_Controller
 		$this->load->view('footer');
 	}
 
+	public function delete()
+	{
+		$id = $this->uri->segment(3);
+
+		load_js(['app'], 'js_assets');
+
+		$this->load->model('projectModel');
+
+		$user = $this->session->userdata("user");
+		$data = array(
+			"page" => "project_edit",
+			"project" => $this->projectModel->getProjectById($id)
+		);
+
+		$this->load->view('header');
+		$this->load->view('page_header', array_merge(array("user" => $user), $data));
+		$this->load->view('delete_project', $data);
+		$this->load->view('page_footer');
+		$this->load->view('footer');
+	}
+
+	public function delete_confirm()
+	{
+		$id = $this->uri->segment(3);
+
+		load_js(['app'], 'js_assets');
+
+		$this->load->model('projectModel');
+
+		$this->projectModel->delete($id);
+		redirect("/dashboard");
+	}
+
 	public function save()
 	{
 		$id = $this->uri->segment(3);
@@ -69,7 +102,6 @@ class Project extends MY_Controller
 		$this->load->model('projectModel');
 		$projectIsValid = TRUE;
 		$hasFile = $_FILES["file"]["size"] > 0;
-		// var_dump($this->input->file("file"));
 
 		$this->form_validation->set_rules($this->rules['project']);
 		if ($this->form_validation->run() == TRUE) {
@@ -82,9 +114,15 @@ class Project extends MY_Controller
 					$this->projectModel->setProject($this->input->post('title'), $this->input->post('description'), $fileData['file_name']);
 				} else {
 					//TODO: Update project
+					$data = array("title" => $this->input->post("title"), "description" => $this->input->post("description"));
+					if ($hasFile) {
+						$data["file"] = $fileData["file_name"];
+					}
+					$this->projectModel->update($id, $data);
 				}
 				redirect('/dashboard');
 			} else {
+				// var_dump($this->upload->display_errors());
 				$projectIsValid = FALSE;
 			}
 		} else {
@@ -114,17 +152,18 @@ class Project extends MY_Controller
 
 		$reader->open($filePath);
 		$table = array();
-		$columns = array();
+		$columns = array("index");
 
 		foreach ($reader->getSheetIterator() as $sheet) {
 			foreach ($sheet->getRowIterator() as $num => $row) {
-				$cells = $row->getCells();
-				foreach ($cells as $col => $cell) {
+				if ($num > 1) {
+					array_push($table, array('index' => $num - 2));
+				}
+				foreach ($row->getCells() as $col => $cell) {
 					if ($num === 1) {
-						$table[$cell->getValue()] = array();
 						array_push($columns, $cell->getValue());
 					} else {
-						array_push($table[$columns[$col]], $cell->getValue());
+						$table[$num - 2][$columns[$col + 1]] = $cell->getValue();
 					}
 				}
 			}
@@ -132,16 +171,63 @@ class Project extends MY_Controller
 
 		$reader->close();
 
-		var_dump($table);
-
 		$user = $this->session->userdata("user");
 		$data = array(
 			"page" => "project_view",
-			"projectId" => $id
+			"project" => $project,
+			"table" => $table
 		);
 
 		$this->load->view('header');
 		$this->load->view('page_header', array_merge(array("user" => $user), $data));
+		$this->load->view('view_project', $data);
+		$this->load->view('page_footer');
+		$this->load->view('footer');
+	}
+
+	public function animate()
+	{
+		$id = $this->uri->segment(3);
+
+		load_js(['app'], 'js_assets');
+
+		$this->load->model('projectModel');
+		$project = $this->projectModel->getProjectById($id);
+
+		$filePath = APPPATH . "public/uploads/" . $project->file;
+		$reader = ReaderEntityFactory::createReaderFromFile($filePath);
+
+		$reader->open($filePath);
+		$table = array();
+		$columns = array("index");
+
+		foreach ($reader->getSheetIterator() as $sheet) {
+			foreach ($sheet->getRowIterator() as $num => $row) {
+				if ($num > 1) {
+					array_push($table, array('index' => $num - 2));
+				}
+				foreach ($row->getCells() as $col => $cell) {
+					if ($num === 1) {
+						array_push($columns, $cell->getValue());
+					} else {
+						$table[$num - 2][$columns[$col + 1]] = $cell->getValue();
+					}
+				}
+			}
+		}
+
+		$reader->close();
+
+		$user = $this->session->userdata("user");
+		$data = array(
+			"page" => "project_view",
+			"project" => $project,
+			"table" => $table
+		);
+
+		$this->load->view('header');
+		$this->load->view('page_header', array_merge(array("user" => $user), $data));
+		$this->load->view('animate_project', $data);
 		$this->load->view('page_footer');
 		$this->load->view('footer');
 	}

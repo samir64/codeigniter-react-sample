@@ -2,19 +2,18 @@ import React from 'react';
 import { BASE_URL } from '../util/constants';
 import { Button, Container, Form, Row } from 'react-bootstrap';
 
-export default class NewProject extends React.Component {
+export default class DeleteProject extends React.Component {
   render() {
     return (
       <Container>
         <Form
-          action="/project/save"
+          action={`/project/delete_confirm/${this.props.project_id}`}
           method="POST"
           className="form mx-auto"
-          encType="multipart/form-data"
         >
           <Form.Group controlId="projectTitle">
             <Form.Label>Project Title</Form.Label>
-            <Form.Control placeholder="Project Title" name="title" />
+            <Form.Control placeholder="Project Title" name="title" defaultValue={this.props.project_title} disabled />
             <Form.Text className="text-muted"></Form.Text>
           </Form.Group>
 
@@ -23,25 +22,32 @@ export default class NewProject extends React.Component {
             <Form.Control
               placeholder="Project Description"
               name="description"
+              defaultValue={this.props.project_description}
+              disabled
             />
             <Form.Text className="text-muted"></Form.Text>
           </Form.Group>
 
           <Form.Group controlId="file">
-            <Form.Label>Project Data:</Form.Label>
-            <div></div>
-            <Form.Control type="file" placeholder="Project Data" name="file" />
-            <Form.Text className="text-muted"></Form.Text>
+            <Form.Label>Do you realy want to delete this project?</Form.Label>
           </Form.Group>
 
           <Row>
             <Button
-              variant="primary"
-              className="col-12 col-md-2"
+              variant="danger"
+              className="col-12 col-md-2 me-md-2"
               block
               type="submit"
             >
-              Save
+              Yes
+            </Button>
+            <Button
+              variant="info"
+              className="col-12 col-md-2 ms-md-2"
+              block
+              onClick={() => {window.location.href="/dashboard"}}
+            >
+              No
             </Button>
           </Row>
         </Form>

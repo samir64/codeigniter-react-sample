@@ -29,5 +29,8 @@ module.exports = {
   },
   resolve: {
     extensions: ['.js', '.jsx']
+  },
+  externals: {
+    globalData: 'globalData'
   }
 };
